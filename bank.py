@@ -1,96 +1,127 @@
+
 import random
 
 
+balance = 0.0
 def main():
-    print('WELCOME TO XYZ BANK')
-    print('1.create a new account\n2.enquiry')
-    user = input('choose your option(1 or 2):  ')
-    
-    # if user select option one for opening new account
-    if(user == '1'):
-        name = input('Enter Your Name: ')
-        age = int(input('Enter Your Age: '))
-        while True:
-            mobile_number = str(input('Enter Your Mobile Number: '))
-            convert_mobile = len(mobile_number)
-            if(convert_mobile < 10):
-                print('enter valid mobile number')
-                mobile_number = str(input('Enter Your Mobile Number: '))
-            else:
-                district = input('Enter Your District: ')
-                state = input('Enter Your State: ')     
-                otp = random.randint(9999,999999)  # generate otp
-                print(otp)
-                userotp = int(input('Enter OTP: '))
-                if(userotp == otp):
-                    print('successfully account created')
-                    main()
-                else:
-                    print('invalid OTP')
-                    userotp = int(input('Enter valid OTP: '))
-                if(userotp == otp):
-                    print('successfully account created')
-                else:
-                    print('you have enter invalid otp twice')
-                main()    # if password incorrect program start again
+        print('WELCOME TO ABC BANK')
+        print('1.CREATE NEW ACCOUNT\n2.BASIC ENQUIRY')
+        userinput1 = input('CHOOSE YOUR OPTION(1 or 2): ')
+        if(userinput1 == '1'):
+                get_name()
+                get_age()
+                get_district()
+                get_state()
+                get_number()
+                verifyotp = otp()
+                verify_otp(verifyotp)
+        elif(userinput1 == '2'):
+                while True:
+                        print('1.CHECK BALANCE\n2.DEPOSITE\n3.WITHDRAW\n4.EXIT')
+                        userinput2 = input('CHOOSE YOUR OPTION(1 or 2 or 3 or 4): ')
+                        if(userinput2 == '1'):
+                                check_balance()
+                        elif(userinput2 == '2'):
+                                deposit()
+                        elif(userinput2 == '3'):
+                                withdraw()
+                        elif(userinput2 == '4'):
+                                print('THANK YOU FOR CHOOSING ABC BANK')
+                                return main()
+        else:
+                print('INVALID SELECTION')
+                return main()
+                
+                
 
 
-    # if user select option two for enquiry
-    elif(user == '2'):
-        global balance
-        balance = 0
-        enquiry = True
         
-        while enquiry:
-            print('1.balance\n2.deposite\n3.withdraw\n4.exit')
-            choice = print('Choice Your Option(1 or 2 or 3 or 4)')
-            userchoice = input('Enter Your Choice: ')
-            if(userchoice == '1'):
-                balance_check()
-            elif(userchoice == '2'):
-                deposite()
-            elif(userchoice == '3'):
-                withdraw()
-            elif(user == '4'):
-                main()
-                enquiry = False
-            
+# code for creating new account
 
-    else:
-        print('Invalid choice')
+def get_name():   #getting name from user
+        while True:
+                name = input('ENTER YOUR NAME: ')
+                if any(char.isdigit() for char in name):
+                        print('ENTER VALID NAME WITHOUT NUMBER')
+                else:
+                        return name
+                
+
+def get_age():   #getting age from user
+        age = int(input('ENTER YOUR AGE: '))
+
+def get_district():   #getting district from user
+        while True:
+                district = input('ENTER YOUR DISTRICT: ')
+                if any(char.isdigit() for char in district):
+                        print('ENTER VALID DISTRICT NAME')
+                else:
+                        return district
+
+def get_state():     #getting state from user
+        while True:
+                state = input('ENTER YOUR STATE NAME: ')
+                if any(char.isdigit() for char in state):
+                        print('ENTER VALID STATE NAME')
+                else:
+                        return state
+
+def get_number():    #getting mobile number from user
+        while True:
+                number = input('ENTER YOUR MOBILE NUMBER: ')
+                convert_str = len(number)
+                if(convert_str < 10 or convert_str > 10):
+                        print('ENTER VALID MOBILE NUMBER')
+                else:
+                        return number
+
+def otp(): # generate otp
+        otp = random.randint(100000,999999)
+        print(f'YOUR OTP NUMBER IS {otp}')
+        return otp
+
+def verify_otp(verifyotp):  # otp section
+        while True:
+                try:
+                        user_otp = int(input('ENTER OTP NUMBER: '))
+                        if (verifyotp == user_otp):
+                                print('YOUR ACCOUNT CREATED SUCCESSFULLY')
+                                return main()
+                                break
+                        else:
+                                print('INVALID OTP NUMBER, PLEASE TRY AGAIN')
+                except ValueError:
+                        print('ENTER A VALID OTP NUMBER')
 
 
 
 
-# check balance function
-def balance_check():
-    print(f'Your balance is {balance:.2f}')
+# code for basic enquiry
+def check_balance():
+        global balance
+        print(f'YOUR AVAILABLE BALANCE IS {balance:.2f}')
+ 
+def deposit():
+        global balance
+        dep_amount = float(input('ENTER DEPOSIT AMOUNT: '))
+        if(dep_amount <= 0):
+                print('INVALID DEPOSIT AMOUNT')
+        else:
+                print(f'SUCCUSSFULLY AMOUNT {dep_amount} DEPOSITED')
+                balance += dep_amount
 
-# deposite function
-def deposite():
-    global balance
-    print('WELCOME TO DEPOSITE PAGE')
-    dep_amt = float(input('Enter Your Deposite Amount: '))
-    print(dep_amt)
-    if(dep_amt < 0):  # if user type negative number
-        print('Invalid Amount')
-    else:
-        print('Amount deposited successfully')
-        balance += dep_amt
-    
-    
-# withdraw function
 def withdraw():
-    global balance
-    print('WELCOME TO WITHDRAW PAGE')
-    with_amt = float(input('Enter Withdraw Amount: '))
-    if(with_amt < 0):
-        print('invalid amount')
-    elif(with_amt > balance):
-        print('insufficiant balance to your account')
-    else:
-        balance -= with_amt
-        print('amount withdraw successfully')
+        global balance
+        amount = float(input('ENTER AMOUNT TO WITHDRAW: '))
+        if amount <= 0:
+                print('ENTER A VALID AMOUNT')
+        elif amount > balance:
+                print('INSUFFICIENT BALANCE')
+        else:
+                balance -= amount
+                print(f'{amount:.2f} WITHDRAWN SUCCESSFULLY')
 
 
+
+#calling all functions
 main()
